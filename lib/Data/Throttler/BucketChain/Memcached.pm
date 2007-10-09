@@ -1,4 +1,4 @@
-# $Id: /mirror/perl/Data-Throttler-Memcached/trunk/lib/Data/Throttler/BucketChain/Memcached.pm 3221 2007-10-09T02:41:05.661804Z daisuke  $
+# $Id: /mirror/perl/Data-Throttler-Memcached/trunk/lib/Data/Throttler/BucketChain/Memcached.pm 3223 2007-10-09T08:00:44.093267Z daisuke  $
 #
 # Copyright (c) 2007 Daisuke Maki <daisuke@endeworks.jp>
 # All rights reserved.
@@ -31,11 +31,11 @@ sub new
 
     my $cache = delete $args{cache} || Cache::Memcached::Managed->new(
         # defaults
-        data => '127.0.0.1:11211',
+        data      => '127.0.0.1:11211',
+        namespace => $class,
         # user-specified
         %args,
         # overrides
-        namespace => $class
     );
     $self->cache( $cache );
 
@@ -122,72 +122,8 @@ sub bucket_add
     };
 }
 
-#sub rotate {
-#    my($self, $time) = @_;
-#    $time = time() unless defined $time;
-#
-#    # If the last bucket handles a time interval that doesn't cover
-#    # $time, we need to rotate the bucket brigade. The first bucket
-#    # will be cleared and re-used as the new last bucket of the chain.
-#
-#    DEBUG "Rotating buckets time=", _hms($time), " ", 
-#          "head=", $self->{head_bucket_idx};
-#
-#    if($self->last_bucket->{time}->{stop} >= $time) {
-#        # $time is still covered in the bucket brigade, we're golden
-#        DEBUG "Rotation not necessary (", 
-#              _hms($self->last_bucket->{time}->{stop}),
-#              " - ", _hms($time), ")";
-#        return 1;
-#    }
-#
-#      # If we're too far off, just dump all buckets and re-init
-#    if($self->{buckets}->[ $self->{tail_bucket_idx} ]->{time}->max <
-#       $time - $self->{interval}) {
-#        DEBUG "Too far off, resetting (", _hms($time), " >> ",
-#              _hms($self->{buckets}->[ $self->{head_bucket_idx} ]->{time}->min),
-#              ")";
-#        $self->reset();
-#        return 1;
-#    }
-#
-#    while($self->last_bucket()->{time}->min <= $time) {
-#        $self->bucket_add();
-#    }
-#
-#    DEBUG "After rotation: ",
-#          _hms($self->{buckets}->[ $self->{head_bucket_idx} ]->{time}->min),
-#          " - ",
-#          _hms($self->{buckets}->[ $self->{tail_bucket_idx} ]->{time}->max),
-#          " (covers ", _hms($time), ")";
-#}
-
-#sub bucket_find
-#{
-#    my($self, $time) = @_;
-#
-#    DEBUG "Searching bucket for time=", _hms($time);
-#
-#        # Search in the newest bucket first, chances are it's there
-#    my $last_bucket = $self->last_bucket();
-#    if($last_bucket->{time}->member($time)) {
-#        DEBUG _hms($time), " covered by last bucket";
-#        return $last_bucket;
-#    }
-#
-#    for(my $b = $self->first_bucket(); $b; $b = $self->next_bucket()) {
-#        if($b->{time}->member($time)) {
-#            DEBUG "Found bucket ", _hms($b->{time}->min), 
-#                  " - ", _hms($b->{time}->max);
-#            return $b;
-#        }
-#    }
-#
-#    DEBUG "No bucket found for time=", _hms($time);
-#    return undef;
-#}
-
-sub try_push {
+sub try_push
+{
     my($self, %options) = @_;
 
     my $key = "_default";

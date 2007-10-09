@@ -16,4 +16,4 @@ requires:
   Cache::Memcached::Managed: 0
   Data::Throttler: 0
   Digest::MD5: 0
-version: 0.00001
+version: 0.00002

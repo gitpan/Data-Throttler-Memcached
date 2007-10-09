@@ -1,4 +1,4 @@
-# $Id: /mirror/perl/Data-Throttler-Memcached/trunk/lib/Data/Throttler/Memcached.pm 3220 2007-10-09T02:34:03.813460Z daisuke  $
+# $Id: /mirror/perl/Data-Throttler-Memcached/trunk/lib/Data/Throttler/Memcached.pm 3223 2007-10-09T08:00:44.093267Z daisuke  $
 #
 # Copyright (c) 2007 Daisuke Maki <daisuke@endeworks.jp>
 # All rights reserved.
@@ -8,7 +8,7 @@ use warnings;
 use base qw(Data::Throttler);
 use Data::Throttler::BucketChain::Memcached;
 
-our $VERSION = '0.00001';
+our $VERSION = '0.00002';
 
 sub new
 {
@@ -61,6 +61,16 @@ host.
 
 To workaround this limitation, Data::Throttler::Memcached uses 
 Cache::Memcached::Managed to store the actual data.
+
+=head1 CAVEATS
+
+There's no locking mechanism when checking/incrementing counts. This means
+that each process could possibly overwrite another's value -- but since
+throttling is something that isn't "exact", I'm not considering this to be
+such a big issue.
+
+We may in the future work around this problem by utilizing distributed locks
+like KeyedMutex. Patches welcome.
 
 =head1 METHODS
 
