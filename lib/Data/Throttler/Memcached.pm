@@ -1,4 +1,4 @@
-# $Id: /mirror/perl/Data-Throttler-Memcached/trunk/lib/Data/Throttler/Memcached.pm 3223 2007-10-09T08:00:44.093267Z daisuke  $
+# $Id: /mirror/perl/Data-Throttler-Memcached/trunk/lib/Data/Throttler/Memcached.pm 8774 2007-11-08T09:43:20.728908Z daisuke  $
 #
 # Copyright (c) 2007 Daisuke Maki <daisuke@endeworks.jp>
 # All rights reserved.
@@ -8,7 +8,7 @@ use warnings;
 use base qw(Data::Throttler);
 use Data::Throttler::BucketChain::Memcached;
 
-our $VERSION = '0.00002';
+our $VERSION = '0.00003';
 
 sub new
 {
@@ -47,6 +47,7 @@ Data::Throttler::Memcached - Memcached-Based Data::Throttler
     interval  => 60,
     cache     => {
       data  => '127.0.0.1:11211', # optional
+    }
   );
   
   $t->try_push( 'foo' );

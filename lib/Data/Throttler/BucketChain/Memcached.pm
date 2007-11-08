@@ -1,4 +1,4 @@
-# $Id: /mirror/perl/Data-Throttler-Memcached/trunk/lib/Data/Throttler/BucketChain/Memcached.pm 3223 2007-10-09T08:00:44.093267Z daisuke  $
+# $Id: /mirror/perl/Data-Throttler-Memcached/trunk/lib/Data/Throttler/BucketChain/Memcached.pm 8774 2007-11-08T09:43:20.728908Z daisuke  $
 #
 # Copyright (c) 2007 Daisuke Maki <daisuke@endeworks.jp>
 # All rights reserved.
@@ -29,13 +29,14 @@ sub new
         }
     }, $class;
 
-    my $cache = delete $args{cache} || Cache::Memcached::Managed->new(
+    my $cache = Cache::Memcached::Managed->new(
         # defaults
         data      => '127.0.0.1:11211',
         namespace => $class,
         # user-specified
-        %args,
+        %{ $args{cache} || {} },
         # overrides
+        expiration => $self->interval * 2
     );
     $self->cache( $cache );
 
